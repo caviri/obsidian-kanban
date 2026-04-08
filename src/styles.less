@@ -288,6 +288,25 @@ button.kanban-plugin__search-cancel-button .kanban-plugin__icon {
       flex-direction: column;
     }
   }
+
+  &.kanban-plugin__masonry {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+      height: fit-content;
+
+      .kanban-plugin__lane-wrapper {
+        margin-inline-end: 10px;
+        margin-block-end: 10px;
+      }
+    }
+  }
 }
 
 .is-mobile .view-content:not(.is-mobile-editing) .kanban-plugin__board > div {

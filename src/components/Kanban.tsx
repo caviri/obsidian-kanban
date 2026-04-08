@@ -201,7 +201,7 @@ export const Kanban = ({ view, stateManager }: KanbanProps) => {
     );
   }
 
-  const axis = boardView === 'list' ? 'vertical' : 'horizontal';
+  const axis = boardView === 'list' || boardView === 'masonry' ? 'vertical' : 'horizontal';
   const searchValue = useSearchValue(
     boardData,
     debouncedSearchQuery,
@@ -269,8 +269,9 @@ export const Kanban = ({ view, stateManager }: KanbanProps) => {
                 className={classcat([
                   c('board'),
                   {
-                    [c('horizontal')]: boardView !== 'list',
+                    [c('horizontal')]: boardView !== 'list' && boardView !== 'masonry',
                     [c('vertical')]: boardView === 'list',
+                    [c('masonry')]: boardView === 'masonry',
                     'is-adding-lane': isLaneFormVisible,
                   },
                 ])}
