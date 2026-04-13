@@ -295,15 +295,26 @@ button.kanban-plugin__search-cancel-button .kanban-plugin__icon {
 
     > div {
       display: flex;
-      flex-wrap: wrap;
       align-items: flex-start;
-      justify-content: flex-start;
+      gap: 10px;
       width: 100%;
       height: fit-content;
 
+      .kanban-plugin__masonry-column {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--masonry-lane-gap, 10px);
+      }
+
       .kanban-plugin__lane-wrapper {
-        margin-inline-end: 10px;
-        margin-block-end: 10px;
+        width: 100%;
+        margin-inline-end: 0;
+      }
+
+      .kanban-plugin__lane-placeholder {
+        display: none;
       }
     }
   }
@@ -722,6 +733,20 @@ button.kanban-plugin__new-item-button {
 
 .kanban-plugin__item-content-wrapper {
   background: var(--background-primary);
+}
+
+.kanban-plugin__item-card-image {
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid var(--background-modifier-border);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+    object-fit: cover;
+  }
 }
 
 .kanban-plugin__item-title-wrapper {

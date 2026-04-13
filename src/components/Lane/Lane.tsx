@@ -247,3 +247,47 @@ function LanesRaw({ lanes, collapseDir }: LanesProps) {
 }
 
 export const Lanes = memo(LanesRaw);
+
+export interface MasonryLanesProps {
+  lanes: Lane[];
+  collapseDir: 'horizontal' | 'vertical';
+  columns: number;
+}
+
+function MasonryLanesRaw({ lanes, collapseDir, columns }: MasonryLanesProps) {
+  const search = useContext(SearchContext);
+  const { view } = useContext(KanbanContext);
+  const boardView = view.useViewState(frontmatterKey) || 'board';
+  const collapseState = view.useViewState('list-collapse') || [];
+
+  const cols = Math.max(1, Math.min(columns, lanes.length || 1));
+  const columnGroups: { lane: Lane; index: number }[][] = Array.from(
+    { length: cols },
+    () => []
+  );
+  lanes.forEach((lane, i) => {
+    columnGroups[i % cols].push({ lane, index: i });
+  });
+
+  return (
+    <>
+      {columnGroups.map((group, colIdx) => (
+        <div key={colIdx} className={c('masonry-column')}>
+          {group.map((entry) => (
+            <DraggableLane
+              collapseDir={collapseDir}
+              isCollapsed={
+                (search?.query && !search.lanes.has(entry.lane)) || !!collapseState[entry.index]
+              }
+              key={boardView + entry.lane.id}
+              lane={entry.lane}
+              laneIndex={entry.index}
+            />
+          ))}
+        </div>
+      ))}
+    </>
+  );
+}
+
+export const MasonryLanes = memo(MasonryLanesRaw);

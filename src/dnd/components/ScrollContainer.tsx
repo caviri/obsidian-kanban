@@ -1,5 +1,5 @@
 import classcat from 'classcat';
-import { ComponentChildren } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 import { c } from 'src/components/helpers';
 
 import { useStoredScrollState } from './ScrollStateContext';
@@ -8,6 +8,7 @@ import { Scrollable } from './Scrollable';
 interface ScrollContainerProps {
   children?: ComponentChildren;
   className?: string;
+  style?: JSX.CSSProperties;
   triggerTypes: string[];
   isStatic?: boolean;
   id: string;
@@ -17,6 +18,7 @@ interface ScrollContainerProps {
 export function ScrollContainer({
   className,
   children,
+  style,
   triggerTypes,
   isStatic,
   id,
@@ -25,7 +27,7 @@ export function ScrollContainer({
   const { setRef, scrollRef } = useStoredScrollState(id, index);
 
   return (
-    <div ref={setRef} className={classcat([className, c('scroll-container')])}>
+    <div ref={setRef} className={classcat([className, c('scroll-container')])} style={style}>
       {isStatic ? (
         children
       ) : (

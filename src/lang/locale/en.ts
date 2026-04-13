@@ -71,12 +71,20 @@ const en = {
   'Expand lists to full width in list view': 'Expand lists to full width in list view',
   'Enter a number to set the list width in pixels.':
     'Enter a number to set the list width in pixels.',
+  'Masonry columns': 'Masonry columns',
+  'Number of columns in masonry view.': 'Number of columns in masonry view.',
+  'Masonry lane gap': 'Masonry lane gap',
+  'Set the vertical gap between lists in masonry view (in pixels).':
+    'Set the vertical gap between lists in masonry view (in pixels).',
   'Maximum number of archived cards': 'Maximum number of archived cards',
   "Archived cards can be viewed in markdown mode. This setting will begin removing old cards once the limit is reached. Setting this value to -1 will allow a board's archive to grow infinitely.":
     "Archived cards can be viewed in markdown mode. This setting will begin removing old cards once the limit is reached. Setting this value to -1 will allow a board's archive to grow infinitely.",
   'Display card checkbox': 'Display card checkbox',
   'When toggled, a checkbox will be displayed with each card':
     'When toggled, a checkbox will be displayed with each card',
+  'Show card image': 'Show card image',
+  'When toggled, cards will display the first image found in the linked note or from frontmatter (image, cover, banner, thumbnail).':
+    'When toggled, cards will display the first image found in the linked note or from frontmatter (image, cover, banner, thumbnail).',
   'Reset to default': 'Reset to default',
   'Date & Time': 'Date & Time',
   'Date trigger': 'Date trigger',

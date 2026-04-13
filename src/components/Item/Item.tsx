@@ -17,6 +17,7 @@ import { frontmatterKey } from 'src/parsers/common';
 import { KanbanContext, SearchContext } from '../context';
 import { c } from '../helpers';
 import { EditState, EditingState, Item, isEditing } from '../types';
+import { CardImage } from './CardImage';
 import { ItemCheckbox } from './ItemCheckbox';
 import { ItemContent } from './ItemContent';
 import { useItemMenu } from './ItemMenu';
@@ -115,6 +116,7 @@ const ItemInner = memo(function ItemInner({
       className={c('item-content-wrapper')}
       {...ignoreAttr}
     >
+      <CardImage item={item} />
       <div className={c('item-title-wrapper')} {...ignoreAttr}>
         <ItemCheckbox
           boardModifiers={boardModifiers}

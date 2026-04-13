@@ -66,6 +66,8 @@ export interface KanbanSettings {
   'inline-metadata-position'?: 'body' | 'footer' | 'metadata-table';
   'lane-width'?: number;
   'link-date-to-daily-note'?: boolean;
+  'masonry-columns'?: number;
+  'masonry-lane-gap'?: number;
   'list-collapse'?: boolean[];
   'max-archive-size'?: number;
   'metadata-keys'?: DataKey[];
@@ -77,6 +79,7 @@ export interface KanbanSettings {
   'new-note-folder'?: string;
   'new-note-template'?: string;
   'show-add-list'?: boolean;
+  'show-card-image'?: boolean;
   'show-archive-all'?: boolean;
   'show-board-settings'?: boolean;
   'show-checkboxes'?: boolean;
@@ -115,6 +118,8 @@ export const settingKeyLookup: Set<keyof KanbanSettings> = new Set([
   'lane-width',
   'link-date-to-daily-note',
   'list-collapse',
+  'masonry-columns',
+  'masonry-lane-gap',
   'max-archive-size',
   'metadata-keys',
   'move-dates',
@@ -125,6 +130,7 @@ export const settingKeyLookup: Set<keyof KanbanSettings> = new Set([
   'new-note-folder',
   'new-note-template',
   'show-add-list',
+  'show-card-image',
   'show-archive-all',
   'show-board-settings',
   'show-checkboxes',
@@ -248,6 +254,50 @@ export class SettingsManager {
       });
 
     new Setting(contentEl)
+      .setName(t('Show card image'))
+      .setDesc(
+        t(
+          'When toggled, cards will display the first image found in the linked note or from frontmatter (image, cover, banner, thumbnail).'
+        )
+      )
+      .then((setting) => {
+        let toggleComponent: ToggleComponent;
+
+        setting
+          .addToggle((toggle) => {
+            toggleComponent = toggle;
+
+            const [value, globalValue] = this.getSetting('show-card-image', local);
+
+            if (value !== undefined) {
+              toggle.setValue(value as boolean);
+            } else if (globalValue !== undefined) {
+              toggle.setValue(globalValue as boolean);
+            }
+
+            toggle.onChange((newValue) => {
+              this.applySettingsUpdate({
+                'show-card-image': {
+                  $set: newValue,
+                },
+              });
+            });
+          })
+          .addExtraButton((b) => {
+            b.setIcon('lucide-rotate-ccw')
+              .setTooltip(t('Reset to default'))
+              .onClick(() => {
+                const [, globalValue] = this.getSetting('show-card-image', local);
+                toggleComponent.setValue(!!globalValue);
+
+                this.applySettingsUpdate({
+                  $unset: ['show-card-image'],
+                });
+              });
+          });
+      });
+
+    new Setting(contentEl)
       .setName(t('New line trigger'))
       .setDesc(
         t(
@@ -361,6 +411,75 @@ export class SettingsManager {
 
           this.applySettingsUpdate({
             $unset: ['lane-width'],
+          });
+        });
+      });
+
+    new Setting(contentEl)
+      .setName(t('Masonry columns'))
+      .setDesc(t('Number of columns in masonry view.'))
+      .addText((text) => {
+        const [value, globalValue] = this.getSetting('masonry-columns', local);
+
+        text.inputEl.setAttr('type', 'number');
+        text.inputEl.placeholder = `${globalValue ? globalValue : '3'} (default)`;
+        text.inputEl.value = value ? value.toString() : '';
+
+        text.onChange((val) => {
+          if (val && numberRegEx.test(val)) {
+            const num = parseInt(val);
+            if (num >= 1 && num <= 12) {
+              text.inputEl.removeClass('error');
+
+              this.applySettingsUpdate({
+                'masonry-columns': {
+                  $set: num,
+                },
+              });
+
+              return;
+            }
+          }
+
+          if (val) {
+            text.inputEl.addClass('error');
+          }
+
+          this.applySettingsUpdate({
+            $unset: ['masonry-columns'],
+          });
+        });
+      });
+
+    new Setting(contentEl)
+      .setName(t('Masonry lane gap'))
+      .setDesc(t('Set the vertical gap between lists in masonry view (in pixels).'))
+      .addText((text) => {
+        const [value, globalValue] = this.getSetting('masonry-lane-gap', local);
+
+        text.inputEl.setAttr('type', 'number');
+        text.inputEl.placeholder = `${globalValue ? globalValue : '10'} (default)`;
+        text.inputEl.value = value ? value.toString() : '';
+
+        text.onChange((val) => {
+          if (val && numberRegEx.test(val)) {
+            text.inputEl.removeClass('error');
+
+            this.applySettingsUpdate({
+              'masonry-lane-gap': {
+                $set: parseInt(val),
+              },
+            });
+
+            return;
+          }
+
+          if (val) {
+            text.inputEl.addClass('error');
+          }
+
+          this.applySettingsUpdate({
+            $unset: ['masonry-lane-gap'],
           });
         });
       });

@@ -258,6 +258,9 @@ export class StateManager {
       'tag-sort': this.getSettingRaw('tag-sort', suppliedSettings) ?? [],
       'date-colors': this.getSettingRaw('date-colors', suppliedSettings) ?? [],
       'tag-action': this.getSettingRaw('tag-action', suppliedSettings) ?? 'obsidian',
+      'masonry-columns': this.getSettingRaw('masonry-columns', suppliedSettings) ?? 3,
+      'masonry-lane-gap': this.getSettingRaw('masonry-lane-gap', suppliedSettings),
+      'show-card-image': this.getSettingRaw('show-card-image', suppliedSettings) ?? false,
     };
   }
 

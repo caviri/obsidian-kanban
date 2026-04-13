@@ -15,7 +15,7 @@ import { DndScope } from '../dnd/components/Scope';
 import { getBoardModifiers } from '../helpers/boardModifiers';
 import { frontmatterKey } from '../parsers/common';
 import { Icon } from './Icon/Icon';
-import { Lanes } from './Lane/Lane';
+import { Lanes, MasonryLanes } from './Lane/Lane';
 import { LaneForm } from './Lane/LaneForm';
 import { TableView } from './Table/Table';
 import { KanbanContext, SearchContext } from './context';
@@ -201,6 +201,9 @@ export const Kanban = ({ view, stateManager }: KanbanProps) => {
     );
   }
 
+  const masonryColumns = stateManager.useSetting('masonry-columns');
+  const masonryLaneGap = stateManager.useSetting('masonry-lane-gap');
+
   const axis = boardView === 'list' || boardView === 'masonry' ? 'vertical' : 'horizontal';
   const searchValue = useSearchValue(
     boardData,
@@ -275,11 +278,31 @@ export const Kanban = ({ view, stateManager }: KanbanProps) => {
                     'is-adding-lane': isLaneFormVisible,
                   },
                 ])}
+                style={
+                  boardView === 'masonry'
+                    ? {
+                        ...(masonryColumns != null
+                          ? { '--masonry-columns': `${masonryColumns}` }
+                          : {}),
+                        ...(masonryLaneGap != null
+                          ? { '--masonry-lane-gap': `${masonryLaneGap}px` }
+                          : {}),
+                      }
+                    : undefined
+                }
                 triggerTypes={boardScrollTiggers}
               >
                 <div>
                   <Sortable axis={axis}>
-                    <Lanes lanes={boardData.children} collapseDir={axis} />
+                    {boardView === 'masonry' ? (
+                      <MasonryLanes
+                        lanes={boardData.children}
+                        collapseDir={axis}
+                        columns={masonryColumns ?? 3}
+                      />
+                    ) : (
+                      <Lanes lanes={boardData.children} collapseDir={axis} />
+                    )}
                     <SortPlaceholder
                       accepts={boardAccepts}
                       className={c('lane-placeholder')}
